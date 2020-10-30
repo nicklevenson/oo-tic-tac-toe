@@ -22,11 +22,11 @@ class TicTacToe
 
 
     def display_board
-        print " #{@board[0]} | #{@board[1]} | #{@board[2]} "
-        print "-----------"
-        print " #{@board[3]} | #{@board[4]} | #{@board[5]} "
-        print "-----------"
-        print " #{@board[6]} | #{@board[7]} | #{@board[8]} "
+       puts " #{@board[0]} | #{@board[1]} | #{@board[2]} "
+       puts "-----------"
+       puts " #{@board[3]} | #{@board[4]} | #{@board[5]} "
+        puts "-----------"
+        puts " #{@board[6]} | #{@board[7]} | #{@board[8]} "
       
     end
 
@@ -46,7 +46,11 @@ class TicTacToe
 
     def valid_move?(index)
         #returns true if move is valid (valid spot on board and free of token)
-        position_taken?(index) == false && @board[index] != nil ? true : false 
+        if index >=0 && index < 9
+            position_taken?(index) == false ? true : false
+        else
+            false
+        end
     end
 
     def turn_count
@@ -67,6 +71,7 @@ class TicTacToe
 
         else
             # puts "invalid input. try again."
+           
            turn
            
         end
@@ -74,20 +79,56 @@ class TicTacToe
     end
 
 
-    # def won?
-    # end
+    def won?
+        WIN_COMBINATIONS.each do |combo|
+            index1 = combo[0]
+            index2 = combo[1]
+            index3 = combo[2]
 
-    # def full?
-    # end
+            if @board[index1] == "X" && @board[index2] == "X" && @board[index3] == "X"
+                return combo
 
-    # def draw?
-    # end
+            elsif @board[index1] == "O" && @board[index2] == "O" && @board[index3] == "O"
+                return combo
+            end
+        end 
+        false
+    end
 
-    # def over?
-    # end
+    def full?
+        @board.include?(" ") ? false : true
+    end
 
-    # def winner
-    # end
+    def draw?
+        won? ? false : full? ? true : false
+    end
+
+    def over?
+        draw? || won? ? true : false
+    end
+
+    def winner
+        if won? 
+            @board[won?[0]] == "X" ? "X" : "O"
+        else
+            nil
+        end
+    end
+
+    def play
+        if over?
+            if won?
+                puts "Congratulations #{winner}!"
+            end
+            
+            if draw?
+                puts "Cat's Game!"
+            end
+            return "Game over"
+        end
+        turn
+        play
+    end
 
 end
 
